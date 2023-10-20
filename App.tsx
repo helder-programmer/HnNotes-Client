@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import { NativeWindStyleSheet } from "nativewind";
-import Login from './src/screens/login';
+import { Routes } from './src/routes';
+import { AuthProvider } from './src/contexts/auth';
 
 NativeWindStyleSheet.setOutput({
     default: "native"
@@ -9,9 +9,8 @@ NativeWindStyleSheet.setOutput({
 
 export default function App() {
     return (
-        <>
-            <Login />
-            <StatusBar style="auto" />
-        </>
+        <AuthProvider>
+            <Routes />
+        </AuthProvider>
     );
 }
