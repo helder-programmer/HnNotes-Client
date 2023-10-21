@@ -21,5 +21,9 @@ export const AuthService = {
     login: async (data: ILoginParams) => {
         const response = await Api.post<{ user: IUser, token: string }>('/users/login', data);
         return response.data;
+    },
+    recoverUserInformations: async () => {
+        const response = await Api.get<IUser>('/users/me');
+        return response.data;
     }
 }

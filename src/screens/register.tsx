@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 
 import Input from '../components/input';
 import { AuthService } from '../services/auth';
+import Button from '../components/button';
 
 
 type Inputs = {
@@ -43,15 +44,19 @@ function Register() {
 
 
     const onSubmit = async ({ name, email, password }: Inputs) => {
-        await AuthService.create({ name, email, password });
-        navigation.navigate('login');
+        try {
+            await AuthService.create({ name, email, password });
+            navigation.navigate('login');
+        } catch(err: any) {
+            console.log(err);
+        }
     }
 
     return (
-        <View className="w-screen h-screen px-2 justify-center items-center">
-            <View className="border items-center w-full border-gray-400 rounded-lg p-4 shadow-md">
+        <View className="w-screen h-screen px-8 justify-center items-center">
+            <View className="items-center w-full">
                 <View id="header" className="items-center space-y-2 mb-4">
-                    <Text className="text-2xl font-bold">HnNotes</Text>
+                    <Text className="text-3xl tracking-tighter font-bold">HnNotes</Text>
                     <Text className="text-lg">Make Your login in the Application</Text>
                 </View>
                 <View className="space-y-3 w-full">
@@ -74,13 +79,10 @@ function Register() {
                         error={!!errors.password}
                         errorText={errors.password?.message}
                     />
-                    <Pressable
-                        className="p-3 bg-blue-500 w-full rounded-md items-center shadow-lg text-white font-bold"
-                        onPress={handleSubmit(onSubmit)}
-                    >
-                        Login
-                    </Pressable>
-                    <Text className="text-center" onPress={() => navigation.navigate('login')}>Já possui conta? Faça seu login</Text>
+                    <Button onPress={handleSubmit(onSubmit)}>
+                        <Text className="text-white font-bold text-md">Create Your Account</Text>
+                    </Button>
+                    <Text onPress={() => navigation.navigate('login')} className="text-center text-blue-500">Já possui conta? Faça seu login</Text>
                 </View>
             </View>
         </View>

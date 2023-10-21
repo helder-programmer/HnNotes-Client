@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Button } from 'react-native';
+import { View, Text } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import * as yup from 'yup';
@@ -6,6 +6,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from '@react-navigation/native';
 
 import Input from '../components/input';
+import Button from '../components/button';
+import { useAuth } from '../contexts/auth';
 
 type Inputs = {
     email: string;
@@ -25,6 +27,7 @@ const fieldsValidationSchema = yup.object().shape({
 
 function Login() {
     const navigation = useNavigation();
+    const { signIn } = useAuth();
     const { register, setValue, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(fieldsValidationSchema)
     });
@@ -35,15 +38,19 @@ function Login() {
     }, [register]);
 
 
-    const onSubmit = ({ email, password }: Inputs) => {
-
+    const onSubmit = async ({ email, password }: Inputs) => {
+        try {
+            await signIn(email, password);
+        }catch(err: any) {
+            alert(err);
+        }
     }
 
     return (
-        <View className="w-screen h-screen  px-2 justify-center items-center">
-            <View className="border items-center w-full border-gray-400 rounded-lg p-4 shadow-md">
+        <View className="w-screen h-screen px-8 justify-center items-center">
+            <View className="items-center w-full">
                 <View id="header" className="items-center space-y-2 mb-4">
-                    <Text className="text-2xl font-bold">HnNotes</Text>
+                    <Text className="text-3xl tracking-tighter font-bold">HnNotes</Text>
                     <Text className="text-lg">Make Your login in the Application</Text>
                 </View>
                 <View className="space-y-3 w-full">
@@ -60,13 +67,10 @@ function Login() {
                         error={!!errors.password}
                         errorText={errors.password?.message}
                     />
-                    <Pressable
-                        className="p-3 bg-blue-500 w-full rounded-md items-center shadow-lg text-white font-bold"
-                        onPress={handleSubmit(onSubmit)}
-                    >
-                        Login
-                    </Pressable>
-                    <Text onPress={() => navigation.navigate('register')} className="text-center">Não possui uma conta? Crie uma</Text>
+                    <Button onPress={handleSubmit(onSubmit)}>
+                        <Text className="text-white font-bold text-md">Login</Text>
+                    </Button>
+                    <Text onPress={() => navigation.navigate('register')} className="text-center text-blue-500">Não possui uma conta? Crie uma</Text>
                 </View>
             </View>
         </View>
