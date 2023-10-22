@@ -5,7 +5,7 @@ import Register from '../screens/register';
 const { Screen, Navigator } = createNativeStackNavigator();
 
 
-export function AuthRoutes() {
+export function AppStackRoutes() {
     return (
         <Navigator>
             <Screen

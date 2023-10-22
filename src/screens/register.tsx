@@ -61,7 +61,7 @@ function Register() {
                 </View>
                 <View className="space-y-3 w-full">
                     <Input
-                        placeholder="Nome"
+                        placeholder="Name"
                         onChangeText={text => setValue('name', text)}
                         error={!!errors.name}
                         errorText={errors.name?.message}

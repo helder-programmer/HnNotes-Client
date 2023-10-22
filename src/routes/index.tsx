@@ -1,13 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { AuthProvider } from '../contexts/auth';
-import { StackRoutes } from './auth.routes';
+import { AuthProvider, useAuth } from '../contexts/auth';
+import { AppTabRoutes } from './appTab.routes';
+import { AuthRoutes } from './auth.routes';
 
 export function Routes() {
-    return (
-        <NavigationContainer>
-            <AuthProvider>
-                <StackRoutes />
-            </AuthProvider>
-        </NavigationContainer>
-    );
+    const { signed } = useAuth();
+    return signed ? <AppTabRoutes /> : <AuthRoutes />
 }

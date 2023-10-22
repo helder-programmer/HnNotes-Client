@@ -8,8 +8,9 @@ import * as SecureStore from 'expo-secure-store';
 interface IAuthContext {
     user: IUser | null;
     setUser: Dispatch<SetStateAction<IUser | null>>;
+    signed: boolean;
     signIn(email: string, password: string): Promise<void>;
-    logout(): Promise<void>;
+    signOut(): Promise<void>;
 }
 
 const AuthContext = createContext({} as IAuthContext);
@@ -17,8 +18,8 @@ const AuthContext = createContext({} as IAuthContext);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<IUser | null>(null);
     const navigation = useNavigation();
-    
-    
+
+
     const getUserInformations = async () => {
         try {
             const token = await SecureStore.getItemAsync('hn-token');
@@ -32,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             navigation.navigate('login');
         }
     }
-    
+
     const signIn = async (email: string, password: string) => {
         const { token, user } = await AuthService.login({ email, password });
         await SecureStore.setItemAsync('hn-token', token);
@@ -40,18 +41,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(user);
     }
 
-    const logout = async () => {
+    const signOut = async () => {
         await SecureStore.deleteItemAsync('hn-token');
         setUser(null);
         navigation.navigate('login');
     }
-    
+
     useEffect(() => {
         getUserInformations();
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, setUser, signIn, logout }}>
+        <AuthContext.Provider
+            value={{
+                signed: !!user,
+                user,
+                setUser,
+                signIn,
+                signOut
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
