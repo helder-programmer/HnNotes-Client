@@ -1,17 +1,18 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons'
 import Home from '../screens/home';
-import Login from '../screens/login';
 import Profile from '../screens/profile';
-import Register from '../screens/register';
-import { AppStackRoutes } from './appStack.routes';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Note from '../screens/note';
 
-const { Screen, Navigator } = createBottomTabNavigator();
+const Tab = createBottomTabNavigator();
+
+const Stack = createNativeStackNavigator();
 
 
-export function AppTabRoutes() {
+function AppTabRoutes() {
     return (
-        <Navigator screenOptions={{
+        <Tab.Navigator screenOptions={{
             headerTitle: 'HnNotes',
             headerStyle: {
                 borderColor: '#d9d9d9',
@@ -19,11 +20,11 @@ export function AppTabRoutes() {
             },
             headerTitleStyle: {
                 fontWeight: 'bold',
-                fontStyle: 'italic',                
+                fontStyle: 'italic',
                 fontSize: 20
             }
         }}>
-            <Screen
+            <Tab.Screen
                 name="home"
                 component={Home}
                 options={{
@@ -38,7 +39,7 @@ export function AppTabRoutes() {
                     )
                 }}
             />
-            <Screen
+            <Tab.Screen
                 name="profile"
                 component={Profile}
                 options={{
@@ -53,6 +54,24 @@ export function AppTabRoutes() {
                     )
                 }}
             />
-        </Navigator>
+        </Tab.Navigator>
+    );
+}
+
+
+export function AppRoutes() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name="root"
+                component={AppTabRoutes}
+            />
+            <Stack.Screen
+                name="note"
+                component={Note}
+            />
+
+        </Stack.Navigator>
     );
 }

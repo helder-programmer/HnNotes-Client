@@ -5,6 +5,7 @@ export declare global {
             register: undefined;
             home: undefined;
             profile: undefined;
+            note: { noteId: string }
         }
     }
 }

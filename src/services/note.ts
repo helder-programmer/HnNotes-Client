@@ -9,5 +9,9 @@ export const NoteService = {
     getAll: async () => {
         const response = await Api.get<INote[]>('/notes');
         return response.data;
+    },
+    getOne: async (noteId: string) => {
+        const response = await Api.get<INote>(`/notes/${noteId}`);
+        return response.data;
     }
 }
