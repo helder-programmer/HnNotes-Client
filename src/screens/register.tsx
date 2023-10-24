@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 import Input from '../components/input';
 import { AuthService } from '../services/auth';
 import Button from '../components/button';
+import CustomText from '../components/customText';
 
 
 type Inputs = {
@@ -56,8 +57,8 @@ function Register() {
         <View className="w-screen h-screen px-8 justify-center items-center">
             <View className="items-center w-full">
                 <View id="header" className="items-center space-y-2 mb-4">
-                    <Text className="text-3xl tracking-tighter font-bold">HnNotes</Text>
-                    <Text className="text-lg">Make Your login in the Application</Text>
+                    <CustomText className="text-3xl tracking-tighter font-bold">HnNotes</CustomText>
+                    <CustomText className="text-lg">Make Your login in the Application</CustomText>
                 </View>
                 <View className="space-y-3 w-full">
                     <Input
@@ -80,9 +81,9 @@ function Register() {
                         errorText={errors.password?.message}
                     />
                     <Button onPress={handleSubmit(onSubmit)}>
-                        <Text className="text-white font-bold text-md">Create Your Account</Text>
+                        <CustomText className="text-white font-bold text-md">Create Your Account</CustomText>
                     </Button>
-                    <Text onPress={() => navigation.navigate('login')} className="text-center text-blue-500">Já possui conta? Faça seu login</Text>
+                    <CustomText onPress={() => navigation.navigate('login')} className="text-center text-blue-500">Já possui conta? Faça seu login</CustomText>
                 </View>
             </View>
         </View>

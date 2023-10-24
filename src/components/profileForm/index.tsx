@@ -29,59 +29,60 @@ function ProfileForm() {
     const { user } = useAuth();
 
     const { register, setValue, handleSubmit, formState: { errors }, getValues } = useForm({
-        resolver: yupResolver(fieldsValidationSchema)
+        resolver: yupResolver(fieldsValidationSchema),
+        defaultValues: {
+            name: user?.name,
+            email: user?.email
+        }
     });
-
-
-    useEffect(() => {
-        register('name', { value: user?.name });
-        register('email', { value: user?.email });
-    }, []);
 
     const onSubmit = async () => {
 
     }
 
     return (
-        <View className="space-y-3 w-full">
-            <Text className="text-lg">Generics Informations</Text>
-            <Input
-                placeholder="Name"
-                onChangeText={text => setValue('name', text)}
-                value={getValues('name')}
-                error={!!errors.name}
-                errorText={errors.name?.message}
-            />
-            <Input
-                placeholder="E-mail"
-                onChangeText={text => setValue('email', text)}
-                value={getValues('email')}
-                error={!!errors.email}
-                errorText={errors.email?.message}
-            />
-            <View className="h-[1px] w-full bg-gray-200" />
-            <Text className="text-lg">Password</Text>
-            <Input
-                placeholder="Old Password"
-                secureTextEntry
-                onChangeText={text => setValue('oldPassword', text)}
-                error={!!errors.oldPassword}
-                errorText={errors.oldPassword?.message}
-            />
-            <Input
-                placeholder="New Password"
-                secureTextEntry
-                onChangeText={text => setValue('newPassword', text)}
-                error={!!errors.newPassword}
-                errorText={errors.newPassword?.message}
-            />
-            <View className="flex flex-row w-full justify-between">
-                <Button className="bg-red-500 w-40">
-                    <Text className="text-white font-bold">Cancelar</Text>
-                </Button>
-                <Button onPress={handleSubmit(onSubmit)} className="w-50 bg-green-400">
-                    <Text className="text-white font-bold text-md">Edit your informations</Text>
-                </Button>
+        <View className="w-full">
+            <View className="space-y-3">
+                <Text className="text-lg">Generics Informations</Text>
+                <Input
+                    placeholder="Name"
+                    onChangeText={text => setValue('name', text)}
+                    value={getValues('name')}
+                    error={!!errors.name}
+                    errorText={errors.name?.message}
+                />
+                <Input
+                    placeholder="E-mail"
+                    onChangeText={text => setValue('email', text)}
+                    value={getValues('email')}
+                    error={!!errors.email}
+                    errorText={errors.email?.message}
+                />
+            </View>
+            <View className="space-y-4">
+                <Text className="text-lg m-0">Password</Text>
+                <Input
+                    placeholder="Old Password"
+                    secureTextEntry
+                    onChangeText={text => setValue('oldPassword', text)}
+                    error={!!errors.oldPassword}
+                    errorText={errors.oldPassword?.message}
+                />
+                <Input
+                    placeholder="New Password"
+                    secureTextEntry
+                    onChangeText={text => setValue('newPassword', text)}
+                    error={!!errors.newPassword}
+                    errorText={errors.newPassword?.message}
+                />
+                <View className="flex flex-row w-full justify-between">
+                    <Button className="bg-red-500 w-40">
+                        <Text className="text-white font-bold">Cancelar</Text>
+                    </Button>
+                    <Button onPress={handleSubmit(onSubmit)} className="w-50 bg-green-400">
+                        <Text className="text-white font-bold text-md">Edit your informations</Text>
+                    </Button>
+                </View>
             </View>
         </View>
     );

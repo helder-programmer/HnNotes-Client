@@ -30,6 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
         } catch (err: any) {
             console.log(`Invalid token ${err}`);
+            setUser(null);
             navigation.navigate('login');
         }
     }

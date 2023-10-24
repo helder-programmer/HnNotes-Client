@@ -13,7 +13,7 @@ export interface INote {
     noteId: string;
     title: string;
     content: string;
-    createAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     user?: IUser;
 }
