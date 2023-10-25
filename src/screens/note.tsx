@@ -1,8 +1,11 @@
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TextInput } from "react-native";
+
 import { INote } from "../@types/entities";
 import { NoteService } from "../services/note";
+import NoteEditor from "../components/noteEditor";
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface IParamsProps {
     noteId: string;
@@ -19,6 +22,11 @@ function Note() {
         setCurrentNote(note);
     }
 
+    const handleChangeContent = async (text: string) => {
+        setCurrentNote({ ...currentNote, content: text });
+    }
+
+
     useEffect(() => {
         getOneNote();
     }, []);
@@ -26,7 +34,21 @@ function Note() {
 
     return (
         <View className="h-screen bg-white py-2">
-            <Text className="font-bold text-2xl">Note: {currentNote.title}</Text>
+            <View className="px-4 flex flex-row justify-between items-center mb-4">
+                <TextInput
+                    className="text-xl"
+                    value={currentNote.title}
+                />
+
+                <View className="flex items-center">
+                    <MaterialIcons name="cloud" size={22} color="#22c55e" />
+                    <Text className="text-xs text-green-500">Saved</Text>
+                </View>
+            </View>
+            <NoteEditor 
+                handleChange={handleChangeContent}
+                content={currentNote.content}
+            />
         </View>
     );
 }

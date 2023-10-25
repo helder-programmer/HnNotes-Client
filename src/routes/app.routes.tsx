@@ -70,6 +70,7 @@ export function AppRoutes() {
             <Stack.Screen
                 name="note"
                 component={Note}
+                options={{ title: 'Note' }}
             />
 
         </Stack.Navigator>
