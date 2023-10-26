@@ -1,26 +1,15 @@
 import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import { BottomSheetTextInputProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetTextInput";
+import { styled } from "nativewind";
 
 interface IProps extends BottomSheetTextInputProps {
 
 }
 
-function CustomBottomSheetTextInput({ style, ...props }: IProps) {
+function CustomBottomSheetTextInput({ ...props }: IProps) {
     return (
-        <BottomSheetTextInput
-            style={[
-                {
-                    borderColor: '#d9d9d9', 
-                    borderWidth: 1, 
-                    borderRadius: 5,
-                    padding: 4,
-                    width: '100%'
-                },
-                style
-            ]}
-            {...props}
-        />
+        <BottomSheetTextInput {...props} />
     );
 }
 
-export default CustomBottomSheetTextInput;
+export default styled(CustomBottomSheetTextInput);

@@ -11,7 +11,7 @@ import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 import Button from "../components/button";
 import { NoteService } from "../services/note";
 import { INote } from "../@types/entities";
-import NotesList from "../components/notesList";
+import NotesList from "../components/home/notesList";
 import Input from "../components/input";
 import CustomBottomSheetTextInput from "../components/customBottomSheetTextInput";
 import CustomText from '../components/customText';
@@ -38,6 +38,29 @@ function Home() {
 
         const newNotes = [note, ...notes];
         setNotes(newNotes);
+        setNoteTitle('');
+    }
+
+    const handleSearchByTitle = (title: string) => {
+
+    }
+
+    const handleDeleteNote = async (noteId: string) => {
+        try {
+
+            await NoteService.remove(noteId);
+
+            const noteToDeleteIndex = notes.findIndex(note => note.noteId === noteId);
+
+            const newNotes = [...notes];
+
+            newNotes.splice(noteToDeleteIndex, 1);
+
+            setNotes(newNotes);
+
+        } catch (err: any) {
+            console.log(err);
+        }
     }
 
     const getAllNotes = async () => {
@@ -66,10 +89,16 @@ function Home() {
                         </CustomText>
                     </Button>
 
-                    <Input placeholder="Search Note..." />
+                    <Input
+                        placeholder="Search Note..."
+                        onChangeText={text => handleSearchByTitle(text)}
+                    />
                 </View>
 
-                <NotesList notes={notes} />
+                <NotesList
+                    notes={notes}
+                    handleDeleteNote={handleDeleteNote}
+                />
             </View>
 
             {/* //Modal */}
@@ -80,7 +109,7 @@ function Home() {
                 snapPoints={snapPoints}
                 onChange={handleSheetChanges}
             >
-                <View id="bottom-modal-content" className="px-4">
+                <View id="bottom-modal-content" className="px-4 space-y-4">
                     <CustomText className="text-xl">
                         Criar Nota
                     </CustomText>
@@ -89,6 +118,7 @@ function Home() {
                             value={noteTitle}
                             onChangeText={text => setNoteTitle(text)}
                             placeholder="Title..."
+                            className="border p-2 text-lg rounded-lg border-gray-400"
                         />
                     </View>
                     <Button onPress={handleCreateNote}>

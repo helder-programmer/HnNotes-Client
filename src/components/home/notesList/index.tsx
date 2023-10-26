@@ -1,16 +1,17 @@
 import { FlatList, ListRenderItem, Dimensions, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { INote } from '../../@types/entities';
+import { INote } from '../../../@types/entities';
 import NoteCard from '../noteCard';
 
 interface IProps {
     notes: INote[];
+    handleDeleteNote(noteId: string): Promise<void>;
 }
 
 const DEVICE_HEIGHT = Dimensions.get('screen').height;
 
-function NotesList({ notes }: IProps) {
+function NotesList({ notes, handleDeleteNote }: IProps) {
     const listHeight = DEVICE_HEIGHT - 365;
     const navigation = useNavigation();
 
@@ -19,6 +20,7 @@ function NotesList({ notes }: IProps) {
             note={item}
             className="mb-2"
             onPress={() => navigation.navigate('note', { noteId: item.noteId })}
+            handleDeleteNote={handleDeleteNote}
         />
     );
 
