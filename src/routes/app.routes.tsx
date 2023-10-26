@@ -2,8 +2,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons'
 import Home from '../screens/home';
 import Profile from '../screens/profile';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Note from '../screens/note';
+
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTheme } from '../contexts/theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -11,16 +13,20 @@ const Stack = createNativeStackNavigator();
 
 
 function AppTabRoutes() {
+    const { theme } = useTheme();
+
     return (
         <Tab.Navigator screenOptions={{
             headerTitle: 'HnNotes',
             headerStyle: {
                 borderColor: '#d9d9d9',
-                borderBottomWidth: 1
+                borderBottomWidth: 1,
+                backgroundColor: theme.colors.secondary
             },
             headerTitleStyle: {
                 fontWeight: 'bold',
                 fontStyle: 'italic',
+                color: theme.colors.text,
                 fontSize: 20
             }
         }}>
@@ -60,10 +66,13 @@ function AppTabRoutes() {
 
 
 export function AppRoutes() {
+
     return (
         <Stack.Navigator>
             <Stack.Screen
-                options={{ headerShown: false }}
+                options={{
+                    headerShown: false,
+                }}
                 name="root"
                 component={AppTabRoutes}
             />

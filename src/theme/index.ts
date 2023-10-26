@@ -1,12 +1,18 @@
 export const lightTheme = {
-    primary: '#FFFFFFF',
-    secondary: '',
-    text: '#333333'
-}
+    name: 'light',
+    colors: {
+        primary: '#FFFFFF',
+        secondary: '#d9d9d9',
+        text: '#333333'
+    }
+};
 
 
 export const darkTheme = {
-    primary: '',
-    secondary: '',
-    text: '#333333'
-}
+    name: 'dark',
+    colors: {
+        primary: '#18181b',
+        secondary: '#1e293b',
+        text: '#FFFFFF'
+    }
+};

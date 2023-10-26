@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import * as yup from 'yup';
@@ -9,6 +9,8 @@ import { useAuth } from '../contexts/auth';
 import Input from '../components/input';
 import Button from '../components/button';
 import CustomText from '../components/customText';
+import { KeyboardAvoidingView } from 'react-native';
+import CustomView from '../components/customView';
 
 type Inputs = {
     email: string;
@@ -42,14 +44,17 @@ function Login() {
     const onSubmit = async ({ email, password }: Inputs) => {
         try {
             await signIn(email, password);
-        }catch(err: any) {
+        } catch (err: any) {
             alert(err);
         }
     }
 
     return (
-        <View className="w-screen h-screen px-8 justify-center items-center">
-            <View className="items-center w-full">
+        <CustomView className="items-center w-full">
+            <KeyboardAvoidingView
+                className="w-screen h-screen px-8 justify-center items-center"
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
                 <View id="header" className="items-center space-y-2 mb-4">
                     <CustomText className="text-3xl tracking-tighter font-bold">HnNotes</CustomText>
                     <CustomText className="text-lg">Make Your login in the Application</CustomText>
@@ -73,8 +78,8 @@ function Login() {
                     </Button>
                     <CustomText onPress={() => navigation.navigate('register')} className="text-center text-blue-500">Não possui uma conta? Crie uma</CustomText>
                 </View>
-            </View>
-        </View>
+            </KeyboardAvoidingView>
+        </CustomView>
     );
 }
 

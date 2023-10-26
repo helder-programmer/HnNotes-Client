@@ -15,6 +15,7 @@ import NotesList from "../components/home/notesList";
 import Input from "../components/input";
 import CustomBottomSheetTextInput from "../components/customBottomSheetTextInput";
 import CustomText from '../components/customText';
+import CustomView from "../components/customView";
 
 function Home() {
     const [noteTitle, setNoteTitle] = useState('');
@@ -72,8 +73,7 @@ function Home() {
 
     return (
         <BottomSheetModalProvider>
-            <View className="py-2 bg-white h-screen" id="main">
-
+            <CustomView className="py-2" id="main">
                 <View id="header" className="px-4 mb-4 space-y-4">
                     <CustomText className="text-2xl font-bold">
                         Your Notes
@@ -81,7 +81,7 @@ function Home() {
 
                     <Button
                         onPress={handlePresentModalPress}
-                        className="flex-row w-32 items-center"
+                        className="flex-row w-32 items-center bg-slate-800"
                     >
                         <MaterialIcons name="add" color="white" size={22} />
                         <CustomText className="text-white">
@@ -99,7 +99,7 @@ function Home() {
                     notes={notes}
                     handleDeleteNote={handleDeleteNote}
                 />
-            </View>
+            </CustomView>
 
             {/* //Modal */}
             <BottomSheetModal
