@@ -1,5 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { View, Text, Switch } from 'react-native';
+import { View, Text } from 'react-native';
 
 import ProfileForm from "../components/profileForm";
 import { useAuth } from "../contexts/auth";
@@ -7,12 +7,11 @@ import CustomText from "../components/customText";
 import CustomView from "../components/customView";
 import Button from '../components/button';
 import { useTheme } from '../contexts/theme';
-import { useState } from 'react';
+import ThemeSwitcher from '../components/themeSwitcher';
 
 function Profile() {
     const { user, signOut } = useAuth();
-    const [isEnabled, setisEnabled] = useState(false);
-    const { theme, handleThemeSwitch } = useTheme();
+    const { theme } = useTheme();
 
     return (
         <CustomView className="w-screen flex-1 px-4 py-3 justify-between">
@@ -32,26 +31,7 @@ function Profile() {
                 <ProfileForm />
             </View>
 
-            <View className="flex-row items-center self-end">
-
-                <Switch
-                    onValueChange={() => {
-                        handleThemeSwitch();
-                        setisEnabled(state => !state);
-                    }}
-                    trackColor={{ false: '#767577', true: '#81b0ff' }}
-                    thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                    value={isEnabled}
-                />
-
-                {
-                    theme.name === 'light'
-                        ?
-                        <MaterialIcons name="nightlight-round" size={22} />
-                        :
-                        <MaterialIcons name="wb-sunny" size={22} color="#f5dd4b" />
-                }
-            </View>
+            <ThemeSwitcher />
         </CustomView>
     );
 }

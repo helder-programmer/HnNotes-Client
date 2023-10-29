@@ -6,6 +6,7 @@ import Note from '../screens/note';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from '../contexts/theme';
+import { StatusBar } from 'expo-status-bar';
 
 const Tab = createBottomTabNavigator();
 

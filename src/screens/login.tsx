@@ -13,6 +13,7 @@ import CustomText from '../components/customText';
 import { KeyboardAvoidingView } from 'react-native';
 import CustomView from '../components/customView';
 import { useTheme } from '../contexts/theme';
+import ThemeSwitcher from '../components/themeSwitcher';
 
 type Inputs = {
     email: string;
@@ -66,56 +67,60 @@ function Login() {
                 delay={500}
                 style={{ backgroundColor: theme.colors.landing }}
             >
-                <CustomText className="text-3xl tracking-tighter font-bold text-white">HnNotes</CustomText>
-                <CustomText className="text-white">Make Your login in the Application</CustomText>
+                <CustomText className="text-4xl tracking-tighter font-bold text-white">HnNotes</CustomText>
+                <CustomText className="text-white text-lg">Create your account</CustomText>
             </Animatable.View>
 
             <Animatable.View
-                className="w-full flex-grow px-8 rounded-t-[30px] py-8"
+                className="w-full flex-grow px-8 rounded-t-[30px] pt-8 pb-2 justify-between"
                 animation="fadeInUp"
                 delay={600}
                 style={{ backgroundColor: theme.colors.primary }}
             >
-                <View className="space-y-4">
-                    <View>
-                        <CustomText className="text-lg">E-mail</CustomText>
-                        <Input
-                            placeholder="E-mail"
-                            className="border-0 border-b"
-                            onChangeText={text => setValue('email', text)}
-                            error={!!errors.email}
-                            errorText={errors.email?.message}
-                            fullWidth
-                        />
+                <View>
+                    <View className="space-y-4">
+                        <View>
+                            <CustomText className="text-lg">E-mail</CustomText>
+                            <Input
+                                placeholder="E-mail"
+                                className="border-0 border-b"
+                                onChangeText={text => setValue('email', text)}
+                                error={!!errors.email}
+                                errorText={errors.email?.message}
+                                fullWidth
+                            />
+                        </View>
+                        <View>
+                            <CustomText className="text-lg">Password</CustomText>
+                            <Input
+                                placeholder="Password"
+                                secureTextEntry
+                                className="border-0 border-b"
+                                onChangeText={text => setValue('password', text)}
+                                error={!!errors.password}
+                                errorText={errors.password?.message}
+                                fullWidth
+                            />
+                        </View>
                     </View>
-                    <View>
-                        <CustomText className="text-lg">Password</CustomText>
-                        <Input
-                            placeholder="Password"
-                            secureTextEntry
-                            className="border-0 border-b"
-                            onChangeText={text => setValue('password', text)}
-                            error={!!errors.password}
-                            errorText={errors.password?.message}
-                            fullWidth
-                        />
-                    </View>
-                </View>
-                <View className="mt-3 space-y-2">
-                    <Button onPress={handleSubmit(onSubmit)} fullWidth>
+                    <View className="mt-3 space-y-3">
+                        <Button onPress={handleSubmit(onSubmit)} fullWidth>
+                            {
+                                isSubmitting
+                                    ?
+                                    <ActivityIndicator size="small" color="#FFFFFF" />
+                                    :
+                                    <CustomText className="text-white font-bold text-md">Login</CustomText>
+                            }
+                        </Button>
                         {
-                            isSubmitting
-                                ?
-                                <ActivityIndicator size="small" color="#FFFFFF" />
-                                :
-                                <CustomText className="text-white font-bold text-md">Login</CustomText>
+                            error && <Text className="text-xs text-red-500">Error: {error}</Text>
                         }
-                    </Button>
-                    {
-                        error && <Text className="text-xs text-red-500">Error: {error}</Text>
-                    }
-                    <CustomText onPress={() => navigation.navigate('register')} className="text-center text-blue-500">Não possui uma conta? Crie uma</CustomText>
+                        <CustomText onPress={() => navigation.navigate('register')} className="text-center text-blue-500">Não possui uma conta? Crie uma</CustomText>
+                    </View>
                 </View>
+            
+                <ThemeSwitcher />
             </Animatable.View>
         </KeyboardAvoidingView>
     );
