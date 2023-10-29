@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useState } from "react";
 import { ThemeProvider as ThemeProviderSC } from "styled-components/native";
-import { darkTheme, lightTheme } from "../theme";
+import { darkTheme, ITheme, lightTheme } from "../theme";
 
 
 interface IThemeContext {
-    theme: any;
+    theme: ITheme;
     handleThemeSwitch(): void;
 }
 
@@ -13,7 +13,7 @@ const ThemeContext = createContext({} as IThemeContext);
 
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setTheme] = useState(darkTheme);
+    const [theme, setTheme] = useState(lightTheme);
 
 
     const handleThemeSwitch = () => {

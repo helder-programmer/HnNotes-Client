@@ -6,6 +6,9 @@ import { INote } from "../@types/entities";
 import { NoteService } from "../services/note";
 import NoteEditor from "../components/noteEditor";
 import { MaterialIcons } from '@expo/vector-icons';
+import CustomView from "../components/customView";
+import Input from "../components/input";
+import { useNotes } from "../contexts/notes";
 
 interface IParamsProps {
     noteId: string;
@@ -18,7 +21,9 @@ function Note() {
     const route = useRoute();
     const [currentNote, setCurrentNote] = useState<INote>({} as INote);
     const [isLoading, setIsLoading] = useState(false);
+    const { notes, setNotes } = useNotes();
     const { noteId } = route.params as IParamsProps;
+
 
 
     const getOneNote = async () => {
@@ -32,9 +37,20 @@ function Note() {
 
         setCurrentNote({ ...currentNote, content: text });
 
+
+
+        
         timer = setTimeout(async () => {
             try {
                 await NoteService.update({ noteId, content: text });
+
+                const updatedNoteIndex = notes.findIndex(note => note.noteId === noteId);
+                const newNotes = [...notes];
+        
+                newNotes[updatedNoteIndex].content = text;
+        
+                setNotes(newNotes);
+
                 setIsLoading(false);
             } catch (err: any) {
                 console.log(err);
@@ -43,19 +59,20 @@ function Note() {
 
     }
 
-
     useEffect(() => {
         getOneNote();
     }, [noteId]);
 
 
     return (
-        <View className="h-screen bg-white py-2">
-            <View className="px-4 flex flex-row justify-between items-center mb-4">
-                <TextInput
-                    className="text-xl"
-                    value={currentNote.title}
-                />
+        <CustomView className="h-screen py-2">
+            <View className="px-4 flex flex-row items-center justify-between mb-4">
+                <View className="w-[50%]">
+                    <Input
+                        className="text-xl border-0"
+                        value={currentNote.title}
+                    />
+                </View>
 
                 <View className="flex items-center">
                     {
@@ -70,11 +87,12 @@ function Note() {
                     }
                 </View>
             </View>
+            
             <NoteEditor
                 handleChange={handleChangeContent}
                 content={currentNote.content}
             />
-        </View>
+        </CustomView>
     );
 }
 

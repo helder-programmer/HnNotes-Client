@@ -1,18 +1,31 @@
-export const lightTheme = {
+
+export interface ITheme {
+    name: 'light' | 'dark';
+    colors: {
+        primary: string,
+        secondary: string,
+        text: string;
+        button: string;
+    }
+};
+
+export const lightTheme: ITheme = {
     name: 'light',
     colors: {
         primary: '#FFFFFF',
-        secondary: '#d9d9d9',
-        text: '#333333'
+        secondary: '#f9fafb',
+        text: '#333333',
+        button: '#2563eb'
     }
 };
 
 
-export const darkTheme = {
+export const darkTheme: ITheme = {
     name: 'dark',
     colors: {
-        primary: '#18181b',
+        primary: '#0f172a',
         secondary: '#1e293b',
-        text: '#FFFFFF'
+        text: '#FFFFFF',
+        button: '#1e293b'
     }
 };

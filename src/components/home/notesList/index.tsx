@@ -3,24 +3,21 @@ import { useNavigation } from '@react-navigation/native';
 
 import { INote } from '../../../@types/entities';
 import NoteCard from '../noteCard';
-
-interface IProps {
-    notes: INote[];
-    handleDeleteNote(noteId: string): Promise<void>;
-}
+import { useNotes } from '../../../contexts/notes';
 
 const DEVICE_HEIGHT = Dimensions.get('screen').height;
 
-function NotesList({ notes, handleDeleteNote }: IProps) {
+function NotesList() {
     const listHeight = DEVICE_HEIGHT - 365;
     const navigation = useNavigation();
+    const { notes, setNotes } = useNotes();
 
     const renderItem: ListRenderItem<INote> = ({ item }) => (
         <NoteCard
             note={item}
             className="mb-2"
             onPress={() => navigation.navigate('note', { noteId: item.noteId })}
-            handleDeleteNote={handleDeleteNote}
+            key={item.noteId}
         />
     );
 

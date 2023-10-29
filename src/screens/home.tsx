@@ -7,19 +7,23 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { View, Text } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
 import { gestureHandlerRootHOC } from "react-native-gesture-handler";
+import { ActivityIndicator } from 'react-native';
 
 import Button from "../components/button";
 import { NoteService } from "../services/note";
-import { INote } from "../@types/entities";
 import NotesList from "../components/home/notesList";
 import Input from "../components/input";
 import CustomBottomSheetTextInput from "../components/customBottomSheetTextInput";
 import CustomText from '../components/customText';
 import CustomView from "../components/customView";
+import { useTheme } from "../contexts/theme";
+import { useNotes } from "../contexts/notes";
 
 function Home() {
+    const { theme } = useTheme();
+    const { notes, setNotes } = useNotes();
     const [noteTitle, setNoteTitle] = useState('');
-    const [notes, setNotes] = useState<INote[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -34,34 +38,26 @@ function Home() {
     }, []);
 
     const handleCreateNote = async () => {
-        const note = await NoteService.create(noteTitle);
-        bottomSheetModalRef.current?.close();
-
-        const newNotes = [note, ...notes];
-        setNotes(newNotes);
-        setNoteTitle('');
-    }
-
-    const handleSearchByTitle = (title: string) => {
-
-    }
-
-    const handleDeleteNote = async (noteId: string) => {
         try {
+            setIsLoading(true);
 
-            await NoteService.remove(noteId);
+            const note = await NoteService.create(noteTitle);
+            bottomSheetModalRef.current?.close();
 
-            const noteToDeleteIndex = notes.findIndex(note => note.noteId === noteId);
-
-            const newNotes = [...notes];
-
-            newNotes.splice(noteToDeleteIndex, 1);
-
+            const newNotes = [note, ...notes];
             setNotes(newNotes);
+            setNoteTitle('');
 
+            setIsLoading(false);
         } catch (err: any) {
+            setIsLoading(false);
             console.log(err);
         }
+    }
+
+    const handleSearchByTitle = async () => {
+        const notes = await NoteService.search(noteTitle);
+        setNotes(notes);
     }
 
     const getAllNotes = async () => {
@@ -73,32 +69,30 @@ function Home() {
 
     return (
         <BottomSheetModalProvider>
-            <CustomView className="py-2" id="main">
+            <CustomView className="py-3" id="main">
                 <View id="header" className="px-4 mb-4 space-y-4">
-                    <CustomText className="text-2xl font-bold">
+                    <CustomText className="text-2xl font-bold tracking-tighter">
                         Your Notes
                     </CustomText>
 
                     <Button
                         onPress={handlePresentModalPress}
-                        className="flex-row w-32 items-center bg-slate-800"
+                        className="flex-row w-32 items-center"
                     >
                         <MaterialIcons name="add" color="white" size={22} />
-                        <CustomText className="text-white">
+                        <CustomText className="text-white mb-[2px]">
                             Create Note
                         </CustomText>
                     </Button>
 
                     <Input
                         placeholder="Search Note..."
-                        onChangeText={text => handleSearchByTitle(text)}
+                        onChangeText={text => setNoteTitle(text)}
+                        onSubmitEditing={handleSearchByTitle}
                     />
                 </View>
 
-                <NotesList
-                    notes={notes}
-                    handleDeleteNote={handleDeleteNote}
-                />
+                <NotesList />
             </CustomView>
 
             {/* //Modal */}
@@ -108,8 +102,10 @@ function Home() {
                 index={1}
                 snapPoints={snapPoints}
                 onChange={handleSheetChanges}
+                backgroundStyle={{ backgroundColor: theme.colors.primary }}
+                handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
             >
-                <View id="bottom-modal-content" className="px-4 space-y-4">
+                <CustomView id="bottom-modal-content" className="px-4 space-y-4 flex-1">
                     <CustomText className="text-xl">
                         Criar Nota
                     </CustomText>
@@ -118,14 +114,23 @@ function Home() {
                             value={noteTitle}
                             onChangeText={text => setNoteTitle(text)}
                             placeholder="Title..."
-                            className="border p-2 text-lg rounded-lg border-gray-400"
+                            className={`border p-2 text-lg rounded-lg border-gray-400`}
+                            style={{ color: theme.colors.text }}
+                            placeholderTextColor={theme.name == 'light' ? '#333333' : '#D9D9D9'}
                         />
                     </View>
                     <Button onPress={handleCreateNote}>
-                        <CustomText className="text-white">Create Note</CustomText>
+                        {
+                            isLoading
+                                ?
+                                <ActivityIndicator size="small" color="#FFFFFF" />
+                                :
+                                <CustomText className="text-white">Create Note</CustomText>
+
+                        }
                     </Button>
 
-                </View>
+                </CustomView>
             </BottomSheetModal>
         </BottomSheetModalProvider>
     );

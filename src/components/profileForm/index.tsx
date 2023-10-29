@@ -3,9 +3,10 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { View, Text } from 'react-native';
 import * as yup from 'yup';
-import { useAuth } from '../../contexts/auth';
 
+import { useAuth } from '../../contexts/auth';
 import Button from '../button';
+import CustomText from '../customText';
 import Input from '../input';
 
 
@@ -43,13 +44,14 @@ function ProfileForm() {
     return (
         <View className="w-full">
             <View className="space-y-3">
-                <Text className="text-lg">Generics Informations</Text>
+                <CustomText className="text-lg">Generics Informations</CustomText>
                 <Input
                     placeholder="Name"
                     onChangeText={text => setValue('name', text)}
                     value={getValues('name')}
                     error={!!errors.name}
                     errorText={errors.name?.message}
+                    fullWidth
                 />
                 <Input
                     placeholder="E-mail"
@@ -57,16 +59,18 @@ function ProfileForm() {
                     value={getValues('email')}
                     error={!!errors.email}
                     errorText={errors.email?.message}
+                    fullWidth
                 />
             </View>
             <View className="space-y-4">
-                <Text className="text-lg m-0">Password</Text>
+                <CustomText className="text-lg m-0">Password</CustomText>
                 <Input
                     placeholder="Old Password"
                     secureTextEntry
                     onChangeText={text => setValue('oldPassword', text)}
                     error={!!errors.oldPassword}
                     errorText={errors.oldPassword?.message}
+                    fullWidth
                 />
                 <Input
                     placeholder="New Password"
@@ -74,12 +78,13 @@ function ProfileForm() {
                     onChangeText={text => setValue('newPassword', text)}
                     error={!!errors.newPassword}
                     errorText={errors.newPassword?.message}
+                    fullWidth
                 />
                 <View className="flex flex-row w-full justify-between">
                     <Button className="bg-red-500 w-40">
                         <Text className="text-white font-bold">Cancelar</Text>
                     </Button>
-                    <Button onPress={handleSubmit(onSubmit)} className="w-50 bg-green-400">
+                    <Button onPress={handleSubmit(onSubmit)} className="w-48 bg-green-400">
                         <Text className="text-white font-bold text-md">Edit your informations</Text>
                     </Button>
                 </View>

@@ -27,5 +27,9 @@ export const NoteService = {
     },
     remove: async (noteId: string) => {
         await Api.delete(`/notes/${noteId}`);
+    },
+    search: async (title: string) => {
+        const response = await Api.get<INote[]>(`/notes/search/?title=${title}`);
+        return response.data;
     }
 }

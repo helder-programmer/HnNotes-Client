@@ -6,6 +6,7 @@ import { AuthProvider } from './src/contexts/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Routes } from './src/routes';
 import { ThemeProvider } from './src/contexts/theme';
+import { NotesProvider } from './src/contexts/notes';
 
 
 NativeWindStyleSheet.setOutput({
@@ -18,8 +19,10 @@ export default function App() {
             <NavigationContainer>
                 <ThemeProvider>
                     <AuthProvider>
-                        <StatusBar style="auto" />
-                        <Routes />
+                        <NotesProvider>
+                            <StatusBar style="auto" />
+                            <Routes />
+                        </NotesProvider>
                     </AuthProvider>
                 </ThemeProvider>
             </NavigationContainer>

@@ -28,6 +28,9 @@ function AppTabRoutes() {
                 fontStyle: 'italic',
                 color: theme.colors.text,
                 fontSize: 20
+            },
+            tabBarStyle: {
+                backgroundColor: theme.colors.secondary
             }
         }}>
             <Tab.Screen
@@ -35,11 +38,10 @@ function AppTabRoutes() {
                 component={Home}
                 options={{
                     title: 'Home',
-                    // headerShown: false,
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ size }) => (
                         <MaterialIcons
                             name="home"
-                            color={color}
+                            color={theme.colors.text}
                             size={size}
                         />
                     )
@@ -50,11 +52,10 @@ function AppTabRoutes() {
                 component={Profile}
                 options={{
                     title: 'Profile',
-                    headerShown: false,
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ size }) => (
                         <MaterialIcons
                             name="person"
-                            color={color}
+                            color={theme.colors.text}
                             size={size}
                         />
                     )

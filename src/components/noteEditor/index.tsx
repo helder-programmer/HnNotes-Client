@@ -1,6 +1,7 @@
 import { useRef } from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, ScrollView, KeyboardAvoidingView, View, SafeAreaView, Text } from "react-native";
 import { RichEditor, RichToolbar, actions } from "react-native-pell-rich-editor";
+import { useTheme } from "../../contexts/theme";
 
 
 const richTextActions = [
@@ -12,6 +13,9 @@ const richTextActions = [
     actions.insertLink,
     actions.setStrikethrough,
     actions.setUnderline,
+    actions.heading1,
+    actions.heading2,
+    actions.heading3,
 ];
 
 
@@ -21,24 +25,42 @@ interface IProps {
 }
 
 function NoteEditor({ handleChange, content }: IProps) {
+    const { theme } = useTheme();
     const richTextRef = useRef<RichEditor>(null);
 
+    const styles = StyleSheet.create({
+        editor: {
+            backgroundColor: theme.colors.secondary,
+            color: theme.colors.text,
+            marginBottom: 10
+        }
+    });
+
     return (
-        <View>
+        <SafeAreaView>
             <RichToolbar
                 editor={richTextRef}
                 actions={richTextActions}
-                selectedIconTint="#873c1e"
-                iconTint="#312921"
+                iconMap={{
+                    [actions.heading1]: ({ tintColor }: any) => (<Text style={[{ color: tintColor }]}>H1</Text>),
+                    [actions.heading2]: ({ tintColor }: any) => (<Text style={[{ color: tintColor }]}>H2</Text>),
+                    [actions.heading3]: ({ tintColor }: any) => (<Text style={[{ color: tintColor }]}>H3</Text>),
+                    [actions.heading4]: ({ tintColor }: any) => (<Text style={[{ color: tintColor }]}>H4</Text>),
+                }}
             />
-            <RichEditor
-                ref={richTextRef}
-                placeholder="Enter your text..."
-                initialHeight={250}
-                onChange={handleChange}
-                initialContentHTML={content}
-            />
-        </View>
+            <ScrollView className="max-h-[60%]">
+                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+                    <RichEditor
+                        ref={richTextRef}
+                        editorStyle={styles.editor}
+                        onChange={descriptionText => {
+                            console.log("descriptionText:", descriptionText);
+                        }}
+                    />
+                </KeyboardAvoidingView>
+            </ScrollView>
+
+        </SafeAreaView>
     );
 }
 

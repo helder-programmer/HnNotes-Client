@@ -1,6 +1,6 @@
 import { View, Text, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from '@react-navigation/native'
@@ -37,6 +37,7 @@ function Register() {
     const { register, setValue, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(fieldsValidationSchema)
     });
+    const [error, setError] = useState('');
 
 
     useEffect(() => {
@@ -50,6 +51,7 @@ function Register() {
             await AuthService.create({ name, email, password });
             navigation.navigate('login');
         } catch (err: any) {
+            setError(err.message);
             console.log(err);
         }
     }
@@ -70,12 +72,14 @@ function Register() {
                         onChangeText={text => setValue('name', text)}
                         error={!!errors.name}
                         errorText={errors.name?.message}
+                        fullWidth
                     />
                     <Input
                         placeholder="E-mail"
                         onChangeText={text => setValue('email', text)}
                         error={!!errors.email}
                         errorText={errors.email?.message}
+                        fullWidth
                     />
                     <Input
                         placeholder="Password"
@@ -83,10 +87,14 @@ function Register() {
                         onChangeText={text => setValue('password', text)}
                         error={!!errors.password}
                         errorText={errors.password?.message}
+                        fullWidth
                     />
-                    <Button onPress={handleSubmit(onSubmit)}>
+                    <Button onPress={handleSubmit(onSubmit)} fullWidth>
                         <CustomText className="text-white font-bold text-md">Create Your Account</CustomText>
                     </Button>
+                    {
+                        error && <Text className="text-xs text-red-500">Error: {error}</Text>
+                    }
                     <CustomText onPress={() => navigation.navigate('login')} className="text-center text-blue-500">Já possui conta? Faça seu login</CustomText>
                 </View>
             </KeyboardAvoidingView>

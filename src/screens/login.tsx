@@ -1,6 +1,6 @@
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, ActivityIndicator } from 'react-native';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from '@react-navigation/native';
@@ -31,9 +31,10 @@ const fieldsValidationSchema = yup.object().shape({
 function Login() {
     const navigation = useNavigation();
     const { signIn } = useAuth();
-    const { register, setValue, handleSubmit, formState: { errors } } = useForm({
+    const { register, setValue, handleSubmit, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(fieldsValidationSchema)
     });
+    const [error, setError] = useState('');
 
     useEffect(() => {
         register('email');
@@ -45,7 +46,7 @@ function Login() {
         try {
             await signIn(email, password);
         } catch (err: any) {
-            alert(err);
+            setError(err.message);
         }
     }
 
@@ -65,6 +66,7 @@ function Login() {
                         onChangeText={text => setValue('email', text)}
                         error={!!errors.email}
                         errorText={errors.email?.message}
+                        fullWidth
                     />
                     <Input
                         placeholder="Password"
@@ -72,10 +74,20 @@ function Login() {
                         onChangeText={text => setValue('password', text)}
                         error={!!errors.password}
                         errorText={errors.password?.message}
+                        fullWidth
                     />
-                    <Button onPress={handleSubmit(onSubmit)}>
-                        <CustomText className="text-white font-bold text-md">Login</CustomText>
+                    <Button onPress={handleSubmit(onSubmit)} fullWidth>
+                        {
+                            isSubmitting
+                                ?
+                                <ActivityIndicator size="small" color="#FFFFFF" />
+                                :
+                                <CustomText className="text-white font-bold text-md">Login</CustomText>
+                        }
                     </Button>
+                    {
+                        error && <Text className="text-xs text-red-500">Error: {error}</Text>
+                    }
                     <CustomText onPress={() => navigation.navigate('register')} className="text-center text-blue-500">Não possui uma conta? Crie uma</CustomText>
                 </View>
             </KeyboardAvoidingView>
