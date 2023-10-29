@@ -23,7 +23,7 @@ function Input({ error = false, className, errorText, fullWidth, ...props }: IPr
                     className,
                     themeClass
                 )}
-                placeholderTextColor={theme.name === 'light' ? '#333' : '#D9D9D9'}
+                placeholderTextColor={theme.name === 'light' ? '#a7a7a7' : '#D9D9D9'}
                 {...props}
             />
             {

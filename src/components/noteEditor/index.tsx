@@ -32,7 +32,7 @@ function NoteEditor({ handleChange, content }: IProps) {
         editor: {
             backgroundColor: theme.colors.secondary,
             color: theme.colors.text,
-            marginBottom: 10
+            marginBottom: 10,   
         }
     });
 
@@ -48,14 +48,13 @@ function NoteEditor({ handleChange, content }: IProps) {
                     [actions.heading4]: ({ tintColor }: any) => (<Text style={[{ color: tintColor }]}>H4</Text>),
                 }}
             />
-            <ScrollView className="max-h-[60%]">
+            <ScrollView className="h-[40%]">
                 <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
                     <RichEditor
                         ref={richTextRef}
                         editorStyle={styles.editor}
-                        onChange={descriptionText => {
-                            console.log("descriptionText:", descriptionText);
-                        }}
+                        initialContentHTML={content}
+                        onChange={handleChange}                    
                     />
                 </KeyboardAvoidingView>
             </ScrollView>
