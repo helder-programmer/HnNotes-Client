@@ -6,7 +6,6 @@ import Note from '../screens/note';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from '../contexts/theme';
-import { StatusBar } from 'expo-status-bar';
 
 const Tab = createBottomTabNavigator();
 
@@ -68,6 +67,7 @@ function AppTabRoutes() {
 
 
 export function AppRoutes() {
+    const { theme } = useTheme();
 
     return (
         <Stack.Navigator>
@@ -81,7 +81,18 @@ export function AppRoutes() {
             <Stack.Screen
                 name="note"
                 component={Note}
-                options={{ title: 'Note' }}
+                options={{
+                    title: 'Update Note',
+                    headerStyle: {                                                                        
+                        backgroundColor: theme.colors.secondary
+                    },
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                        color: theme.colors.text,
+                        fontSize: 20
+                    },                 
+                    headerTintColor: theme.colors.text                       
+                }}
             />
 
         </Stack.Navigator>

@@ -35,9 +35,16 @@ function Login() {
     const navigation = useNavigation();
     const { signIn } = useAuth();
     const { theme } = useTheme();
-    const { register, setValue, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+
+    const {
+        register,
+        setValue,
+        handleSubmit,
+        formState: { errors, isSubmitting }
+    } = useForm({
         resolver: yupResolver(fieldsValidationSchema)
     });
+
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -119,7 +126,7 @@ function Login() {
                         <CustomText onPress={() => navigation.navigate('register')} className="text-center text-blue-500">Não possui uma conta? Crie uma</CustomText>
                     </View>
                 </View>
-            
+
                 <ThemeSwitcher />
             </Animatable.View>
         </KeyboardAvoidingView>

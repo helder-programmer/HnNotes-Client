@@ -39,7 +39,7 @@ function NoteCard({ note, className, ...props }: IProps) {
 
     return (
         <Pressable
-            className={twMerge("border rounded-md px-4 py-4 h-32 flex justify-between shadow-blue shadow-lg border-gray-500", className)}
+            className={twMerge("border rounded-md px-4 py-4 h-32 flex justify-between shadow-lg border-gray-500", className)}
             {...props}
         >
             <View className="flex flex-row items-center justify-between">

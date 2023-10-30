@@ -18,18 +18,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     const getTheme = async () => {
         const currentTheme = await SecureStore.getItemAsync('hn-theme');
-        const currentParsedTheme = JSON.parse(String(currentTheme));
 
-        if (!currentParsedTheme) {
-            setTheme(currentParsedTheme);
-        }
+
+        const currentParsedTheme = JSON.parse(String(currentTheme));
+        setTheme(currentParsedTheme);
+
     }
 
 
-    
+
     const handleThemeSwitch = async () => {
         try {
-            
+
             if (theme.name === 'light')
                 setTheme(darkTheme);
             else
@@ -42,9 +42,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
 
     useEffect(() => {
-        
-    }, [theme]);
-    
+        getTheme();
+    }, []);
+
     return (
         <ThemeContext.Provider value={{ theme, handleThemeSwitch }}>
             <ThemeProviderSC theme={theme}>

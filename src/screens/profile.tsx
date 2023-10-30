@@ -1,13 +1,14 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { View, Text } from 'react-native';
 
-import ProfileForm from "../components/profileForm";
+
 import { useAuth } from "../contexts/auth";
 import CustomText from "../components/customText";
 import CustomView from "../components/customView";
 import Button from '../components/button';
 import { useTheme } from '../contexts/theme';
 import ThemeSwitcher from '../components/themeSwitcher';
+import GenericInformationsForm from '../profile/genericInformationsForm';
 
 function Profile() {
     const { user, signOut } = useAuth();
@@ -28,9 +29,9 @@ function Profile() {
                         <Text className="text-blue-600">Logout</Text>
                     </Button>
                 </View>
-                <ProfileForm />
-            </View>
 
+                <GenericInformationsForm />
+            </View>
             <ThemeSwitcher />
         </CustomView>
     );

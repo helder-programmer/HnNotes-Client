@@ -38,25 +38,52 @@ function Note() {
         setCurrentNote({ ...currentNote, content: text });
 
 
-
-        
         timer = setTimeout(async () => {
             try {
                 await NoteService.update({ noteId, content: text });
 
                 const updatedNoteIndex = notes.findIndex(note => note.noteId === noteId);
                 const newNotes = [...notes];
-        
+
                 newNotes[updatedNoteIndex].content = text;
-        
+
                 setNotes(newNotes);
 
                 setIsLoading(false);
             } catch (err: any) {
                 console.log(err);
+                alert(err);
             }
         }, timeout);
 
+    }
+
+
+    const handleChangeTitle = async (title: string) => {
+        clearTimeout(timer);
+        setIsLoading(true);
+
+        setCurrentNote({ ...currentNote, title });
+
+        timer = setTimeout(async () => {
+
+            try {
+                await NoteService.update({ noteId, title });
+
+                const updatedNoteIndex = notes.findIndex(note => note.noteId === noteId);
+                const newNotes = [...notes];
+
+                newNotes[updatedNoteIndex].title = title;
+
+                setNotes(newNotes);
+
+                setIsLoading(false);
+
+            } catch (err: any) {
+                console.log(err);
+                alert(err);
+            }
+        }, timeout);
     }
 
     useEffect(() => {
@@ -69,25 +96,29 @@ function Note() {
             <View className="px-4 flex flex-row items-center justify-between mb-4">
                 <View className="w-[50%]">
                     <Input
-                        className="text-xl border-0"
+                        className="text-xl border-0 font-bold"
                         value={currentNote.title}
+                        onChangeText={text => handleChangeTitle(text)}
                     />
                 </View>
 
                 <View className="flex items-center">
                     {
-                        isLoading ?
+                        isLoading
+                            ?
                             <>
                                 <MaterialIcons name="cloud-upload" size={20} color="blue" />
                                 <Text className="text-xs text-blue-500">Saving</Text>
-                            </> : <>
+                            </>
+                            :
+                            <>
                                 <MaterialIcons name="cloud-done" size={20} color="#22c55e" />
                                 <Text className="text-xs text-green-500">Saved</Text>
                             </>
                     }
                 </View>
             </View>
-            
+
             <NoteEditor
                 handleChange={handleChangeContent}
                 content={currentNote.content}
