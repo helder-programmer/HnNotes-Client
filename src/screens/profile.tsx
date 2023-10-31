@@ -8,7 +8,7 @@ import CustomView from "../components/customView";
 import Button from '../components/button';
 import { useTheme } from '../contexts/theme';
 import ThemeSwitcher from '../components/themeSwitcher';
-import GenericInformationsForm from '../profile/genericInformationsForm';
+import GenericInformationsForm from '../components/profile/genericInformationsForm';
 
 function Profile() {
     const { user, signOut } = useAuth();

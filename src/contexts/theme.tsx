@@ -20,6 +20,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         const currentTheme = await SecureStore.getItemAsync('hn-theme');
 
 
+        if (currentTheme === '' || currentTheme === undefined || currentTheme === null) return;
+
+
         const currentParsedTheme = JSON.parse(String(currentTheme));
         setTheme(currentParsedTheme);
 

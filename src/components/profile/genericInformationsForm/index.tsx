@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form';
 import { View, Text } from 'react-native';
 import * as yup from 'yup';
 
-import { useAuth } from '../../contexts/auth';
-import Button from '../../components/button';
-import Input from '../../components/input';
-import CustomText from '../../components/customText';
+import { useAuth } from '../../../contexts/auth';
+import Button from '../../button';
+import Input from '../../input';
+import CustomText from '../../customText';
 
 const fieldsValidationSchema = yup.object().shape({
     name: yup
