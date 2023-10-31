@@ -57,7 +57,11 @@ function Login() {
         try {
             await signIn(email, password);
         } catch (err: any) {
-            setError(err.message);
+            if (err.response) {
+                setError(err.response.data.message);
+            } else {
+                setError(err.message);
+            }
         }
     }
 

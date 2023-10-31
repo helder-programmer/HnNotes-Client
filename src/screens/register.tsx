@@ -54,8 +54,11 @@ function Register() {
             await AuthService.create({ name, email, password });
             navigation.navigate('login');
         } catch (err: any) {
-            setError(err.message);
-            console.log(err);
+            if (err.response) {
+                setError(err.response.data.message);
+            } else {
+                setError(err.message);
+            }
         }
     }
 
@@ -83,8 +86,6 @@ function Register() {
                 style={{ backgroundColor: theme.colors.primary }}
             >
                 <View>
-
-
                     <View className="space-y-4">
                         <View>
                             <CustomText className="text-lg">Name</CustomText>

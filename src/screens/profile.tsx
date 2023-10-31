@@ -9,6 +9,7 @@ import Button from '../components/button';
 import { useTheme } from '../contexts/theme';
 import ThemeSwitcher from '../components/themeSwitcher';
 import GenericInformationsForm from '../components/profile/genericInformationsForm';
+import PasswordForm from '../components/profile/passwordForm';
 
 function Profile() {
     const { user, signOut } = useAuth();
@@ -30,7 +31,9 @@ function Profile() {
                     </Button>
                 </View>
 
+
                 <GenericInformationsForm />
+                <PasswordForm />
             </View>
             <ThemeSwitcher />
         </CustomView>

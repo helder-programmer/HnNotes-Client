@@ -13,6 +13,16 @@ interface ILoginParams {
     password: string;
 }
 
+interface IUpdateParams {
+    name: string;
+    email: string;
+}
+
+interface IUpdatePasswordParams {
+    oldPassword: string;
+    newPassword: string;
+}
+
 export const AuthService = {
     create: async (data: ICreateUserParams) => {
         const response = await Api.post('/users', data);
@@ -24,6 +34,14 @@ export const AuthService = {
     },
     recoverUserInformations: async () => {
         const response = await Api.get<IUser>('/users/me');
+        return response.data;
+    },
+    update: async (data: IUpdateParams) => {
+        const response = await Api.put<IUser>('/users/', data);
+        return response.data;
+    },
+    updatePassword: async (data: IUpdatePasswordParams) => {
+        const response = await Api.put('/users/password', data);
         return response.data;
     }
 }

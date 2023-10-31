@@ -1,44 +1,61 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { View, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import * as yup from 'yup';
 
 import { useAuth } from '../../../contexts/auth';
 import Button from '../../button';
 import Input from '../../input';
 import CustomText from '../../customText';
+import { AuthService } from '../../../services/auth';
+
+type Inputs = {
+    name: string;
+    email: string;
+}
 
 const fieldsValidationSchema = yup.object().shape({
     name: yup
         .string()
-        .required('O nome é obrigatório'),
+        .required('Name is required!'),
     email: yup
         .string()
-        .required('O e-mail é obrigatório')
-        .email('Digite um e-mail válido'),
-})
+        .required('E-mail is required!')
+        .email('Type a valid e-mail!'),
+});
 
 function GenericInformationsForm() {
-    const { user } = useAuth();
-
-    const { register, setValue, handleSubmit, formState: { errors }, getValues } = useForm({
+    const { user, signOut } = useAuth();
+    const { register, setValue, handleSubmit, formState: { errors, isSubmitting }, getValues } = useForm({
         resolver: yupResolver(fieldsValidationSchema),
-        defaultValues: {
-            name: user!.name,
-            email: user!.email
-        }
     });
 
-    const onSubmit = async () => {
-        
+    const onSubmit = async ({ name, email }: Inputs) => {
+        try {
+
+            if (user?.name === name && user.email === user.email) return;
+            
+            await AuthService.update({ name, email });
+            alert('Your informations are modified. Please, make your login for more security!');
+            await signOut();
+        } catch (err: any) {
+            console.log(err);
+            alert(err);
+        }
     }
+
+    useEffect(() => {
+        register('name', { value: user?.name });
+        register('email', { value: user?.email });
+    }, []);
 
     return (
         <View className="w-full">
             <View className="space-y-3">
-                <CustomText className="text-lg">Generics Informations</CustomText>
+                <CustomText className="text-lg">Generic Informations</CustomText>
                 <Input
+                    defaultValue={user?.name}
                     placeholder="Name"
                     onChangeText={text => setValue('name', text)}
                     value={getValues('name')}
@@ -47,6 +64,7 @@ function GenericInformationsForm() {
                     fullWidth
                 />
                 <Input
+                    defaultValue={user?.email}
                     placeholder="E-mail"
                     onChangeText={text => setValue('email', text)}
                     value={getValues('email')}
@@ -56,11 +74,14 @@ function GenericInformationsForm() {
                 />
             </View>
             <View className="flex flex-row w-full justify-between mt-3">
-                <Button className="bg-red-600 w-40">
-                    <Text className="text-white font-bold">Cancelar</Text>
-                </Button>
-                <Button onPress={handleSubmit(onSubmit)} className="w-48 bg-green-500">
-                    <Text className="text-white font-bold text-md">Edit your informations</Text>
+                <Button onPress={handleSubmit(onSubmit)} fullWidth className="bg-teal-600">
+                    {
+                        isSubmitting
+                            ?
+                            <ActivityIndicator size="small" color="#FFFFFF" />
+                            :
+                            <Text className="text-white font-bold text-md">Edit your informations</Text>
+                    }
                 </Button>
             </View>
         </View>
