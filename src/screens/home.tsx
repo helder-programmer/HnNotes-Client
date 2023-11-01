@@ -52,12 +52,18 @@ function Home() {
         } catch (err: any) {
             setIsLoading(false);
             console.log(err);
+            alert(err);
         }
     }
 
     const handleSearchByTitle = async () => {
-        const notes = await NoteService.search(noteTitle);
-        setNotes(notes);
+        try {
+            const notes = await NoteService.search(noteTitle);
+            setNotes(notes);
+        } catch (err: any) {
+            console.log(err);
+            alert(err);
+        }
     }
 
     const getAllNotes = async () => {
@@ -126,10 +132,8 @@ function Home() {
                                 <ActivityIndicator size="small" color="#FFFFFF" />
                                 :
                                 <CustomText className="text-white">Create Note</CustomText>
-
                         }
                     </Button>
-
                 </CustomView>
             </BottomSheetModal>
         </BottomSheetModalProvider>

@@ -1,5 +1,6 @@
 import { FlatList, ListRenderItem, Dimensions, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as Animatable from 'react-native-animatable';
 
 import { INote } from '../../../@types/entities';
 import NoteCard from '../noteCard';
@@ -22,7 +23,7 @@ function NotesList() {
     );
 
     return (
-        <View>
+        <Animatable.View animation="fadeInUp">
             <FlatList
                 data={notes}
                 renderItem={renderItem}
@@ -30,7 +31,7 @@ function NotesList() {
                 style={{ height: listHeight }}
                 className="px-4"
             />
-        </View>
+        </Animatable.View>
     );
 }
 

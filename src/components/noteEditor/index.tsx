@@ -32,7 +32,7 @@ function NoteEditor({ handleChange, content }: IProps) {
         editor: {
             backgroundColor: theme.colors.secondary,
             color: theme.colors.text,
-            marginBottom: 10,   
+            marginBottom: 10
         }
     });
 
@@ -54,7 +54,8 @@ function NoteEditor({ handleChange, content }: IProps) {
                         ref={richTextRef}
                         editorStyle={styles.editor}
                         initialContentHTML={content}
-                        onChange={handleChange}                    
+                        onChange={handleChange}  
+                        initialHeight={250}             
                     />
                 </KeyboardAvoidingView>
             </ScrollView>
