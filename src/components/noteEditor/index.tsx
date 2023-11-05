@@ -16,6 +16,9 @@ const richTextActions = [
     actions.heading1,
     actions.heading2,
     actions.heading3,
+    actions.indent,
+    actions.outdent,
+    actions.removeFormat
 ];
 
 
@@ -47,6 +50,8 @@ function NoteEditor({ handleChange, content }: IProps) {
                     [actions.heading3]: ({ tintColor }: any) => (<Text style={[{ color: tintColor }]}>H3</Text>),
                     [actions.heading4]: ({ tintColor }: any) => (<Text style={[{ color: tintColor }]}>H4</Text>),
                 }}
+                selectedIconTint="#7700ff"
+                iconTint="#333333"                
             />
             <ScrollView className="h-[40%]">
                 <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
