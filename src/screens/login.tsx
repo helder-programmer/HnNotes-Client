@@ -23,11 +23,11 @@ type Inputs = {
 const fieldsValidationSchema = yup.object().shape({
     email: yup
         .string()
-        .required('Digite seu e-mail')
-        .email('Digite um e-mail válido'),
+        .required('Plase, type your e-mail')
+        .email('Type a valid e-mail'),
     password: yup
         .string()
-        .required('Digite sua senha')
+        .required('Plase, type your password')
 });
 
 
@@ -93,7 +93,7 @@ function Login() {
                         <View>
                             <CustomText className="text-lg">E-mail</CustomText>
                             <Input
-                                placeholder="E-mail"
+                                placeholder="Type your e-mail"
                                 className="border-0 border-b"
                                 onChangeText={text => setValue('email', text)}
                                 error={!!errors.email}
@@ -104,7 +104,7 @@ function Login() {
                         <View>
                             <CustomText className="text-lg">Password</CustomText>
                             <Input
-                                placeholder="Password"
+                                placeholder="Type your password"
                                 secureTextEntry
                                 className="border-0 border-b"
                                 onChangeText={text => setValue('password', text)}

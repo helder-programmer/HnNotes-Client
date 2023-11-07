@@ -9,9 +9,9 @@ function ThemeSwitcher() {
     const { theme, handleThemeSwitch } = useTheme();
 
 
-     useEffect(() => {
+    useEffect(() => {
         if (theme.name === 'dark') setisEnabled(true);
-     }, [theme.name]);
+    }, [theme.name]);
 
     return (
         <View className="flex-row items-center self-end">
@@ -25,13 +25,7 @@ function ThemeSwitcher() {
                 value={isEnabled}
             />
 
-            {
-                theme.name === 'light'
-                    ?
-                    <MaterialIcons name="nightlight-round" size={22} />
-                    :
-                    <MaterialIcons name="wb-sunny" size={22} color="#f5dd4b" />
-            }
+            <MaterialIcons name="nightlight-round" size={22} color={theme.name === 'light' ? '#333333' : '#f5dd4b'} />
         </View>
     );
 }

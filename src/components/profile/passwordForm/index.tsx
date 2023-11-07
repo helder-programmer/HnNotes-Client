@@ -18,10 +18,10 @@ type Inputs = {
 const fieldsValidationSchema = yup.object().shape({
     oldPassword: yup
         .string()
-        .required('Old Password is required!'),
+        .required('Old Password is required'),
     newPassword: yup
         .string()
-        .required('New Password is required!')
+        .required('New Password is required')
 });
 
 function PasswordForm() {

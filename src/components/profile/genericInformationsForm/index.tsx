@@ -9,6 +9,7 @@ import Button from '../../button';
 import Input from '../../input';
 import CustomText from '../../customText';
 import { AuthService } from '../../../services/auth';
+import { useTheme } from '../../../contexts/theme';
 
 type Inputs = {
     name: string;
@@ -27,6 +28,8 @@ const fieldsValidationSchema = yup.object().shape({
 
 function GenericInformationsForm() {
     const { user, signOut } = useAuth();
+    const { theme } = useTheme();
+
     const { register, setValue, handleSubmit, formState: { errors, isSubmitting }, getValues } = useForm({
         resolver: yupResolver(fieldsValidationSchema),
     });
@@ -35,7 +38,7 @@ function GenericInformationsForm() {
         try {
 
             if (user?.name === name && user.email === user.email) return;
-            
+
             await AuthService.update({ name, email });
             alert('Your informations are modified. Please, make your login for more security!');
             await signOut();
@@ -46,9 +49,11 @@ function GenericInformationsForm() {
     }
 
     useEffect(() => {
-        register('name', { value: user?.name });
-        register('email', { value: user?.email });
-    }, []);
+        if (user) {
+            setValue('name', user.name);
+            setValue('email', user.email);
+        }
+    }, [user]);
 
     return (
         <View className="w-full">
@@ -58,7 +63,6 @@ function GenericInformationsForm() {
                     defaultValue={user?.name}
                     placeholder="Name"
                     onChangeText={text => setValue('name', text)}
-                    value={getValues('name')}
                     error={!!errors.name}
                     errorText={errors.name?.message}
                     fullWidth
@@ -66,8 +70,7 @@ function GenericInformationsForm() {
                 <Input
                     defaultValue={user?.email}
                     placeholder="E-mail"
-                    onChangeText={text => setValue('email', text)}
-                    value={getValues('email')}
+                    onChangeText={text => setValue('email', text)}                    
                     error={!!errors.email}
                     errorText={errors.email?.message}
                     fullWidth

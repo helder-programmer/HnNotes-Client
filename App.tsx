@@ -19,14 +19,14 @@ export default function App() {
     return (
         <SafeAreaView className="flex-1">
             <NavigationContainer>
-                <ThemeProvider>
-                    <AuthProvider>
+                <AuthProvider>
+                    <ThemeProvider>
                         <NotesProvider>
                             <StatusBar style="dark" translucent />
                             <Routes />
                         </NotesProvider>
-                    </AuthProvider>
-                </ThemeProvider>
+                    </ThemeProvider>
+                </AuthProvider>
             </NavigationContainer>
         </SafeAreaView>
     );
