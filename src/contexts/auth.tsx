@@ -1,4 +1,7 @@
 import React, { Dispatch, SetStateAction, createContext, useContext, useState, useEffect } from "react";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import Google, { makeRedirectUri } from 'expo-auth-session';
+import { auth } from "../services/firebase";
 
 import { IUser } from "../@types/entities";
 import { AuthService } from "../services/auth";
@@ -36,6 +39,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     const signIn = async (email: string, password: string) => {
+        Google.useAuthRequest({
+            clientId: '1051088932850-q2poc746pj8k9q7tafa79lc5ug387r23.apps.googleusercontent.com',
+            redirectUri: makeRedirectUri()
+        }, null);
         const { token, user } = await AuthService.login({ email, password });
         await SecureStore.setItemAsync('hn-token', token);
 
