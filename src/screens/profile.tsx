@@ -16,8 +16,8 @@ function Profile() {
     return (
         <CustomView className="w-screen flex-1 px-4 py-3 justify-between">
             <View>
-                <CustomText className="text-2xl font-bold tracking-tighter">Profile</CustomText>
-                <View className="flex flex-row justify-between mb-4 items-center">
+                <CustomText className="text-2xl font-bold tracking-tighter mb-3">Profile</CustomText>
+                <View className="flex flex-row justify-between gap-y-3 flex-wrap mb-4 items-center">
                     <CustomText className="text-lg">This is your profile, {user?.name}.</CustomText>
                     <Button
                         className="flex-row items-center gap-x-1 p-2"

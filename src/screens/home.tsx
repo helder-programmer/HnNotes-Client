@@ -125,7 +125,7 @@ function Home() {
                             placeholderTextColor={theme.name == 'light' ? '#333333' : '#D9D9D9'}
                         />
                     </View>
-                    <Button onPress={handleCreateNote}>
+                    <Button onPress={handleCreateNote} disabled={isLoading}>
                         {
                             isLoading
                                 ?

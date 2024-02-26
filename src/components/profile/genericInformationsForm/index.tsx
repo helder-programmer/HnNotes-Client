@@ -1,59 +1,20 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { View, Text, ActivityIndicator } from 'react-native';
-import * as yup from 'yup';
-
-import { useAuth } from '../../../contexts/auth';
 import Button from '../../button';
 import Input from '../../input';
 import CustomText from '../../customText';
-import { AuthService } from '../../../services/auth';
-import { useTheme } from '../../../contexts/theme';
-
-type Inputs = {
-    name: string;
-    email: string;
-}
-
-const fieldsValidationSchema = yup.object().shape({
-    name: yup
-        .string()
-        .required('Name is required!'),
-    email: yup
-        .string()
-        .required('E-mail is required!')
-        .email('Type a valid e-mail!'),
-});
+import { useGenericInformationsForm } from './hooks/useGenericInformationsForm';
+import { useAuth } from '../../../contexts/auth';
 
 function GenericInformationsForm() {
-    const { user, signOut } = useAuth();
-    const { theme } = useTheme();
-
-    const { register, setValue, handleSubmit, formState: { errors, isSubmitting }, getValues } = useForm({
-        resolver: yupResolver(fieldsValidationSchema),
-    });
-
-    const onSubmit = async ({ name, email }: Inputs) => {
-        try {
-
-            if (user?.name === name && user.email === user.email) return;
-
-            await AuthService.update({ name, email });
-            alert('Your informations are modified. Please, make your login for more security!');
-            await signOut();
-        } catch (err: any) {
-            console.log(err);
-            alert(err);
-        }
-    }
-
-    useEffect(() => {
-        if (user) {
-            setValue('name', user.name);
-            setValue('email', user.email);
-        }
-    }, [user]);
+    const {
+        errors,
+        isSubmitting,
+        getValues,
+        handleSubmit,
+        register,
+        setValue
+    } = useGenericInformationsForm();
+    const { user } = useAuth();
 
     return (
         <View className="w-full">
@@ -67,17 +28,14 @@ function GenericInformationsForm() {
                     errorText={errors.name?.message}
                     fullWidth
                 />
-                <Input
-                    defaultValue={user?.email}
-                    placeholder="E-mail"
-                    onChangeText={text => setValue('email', text)}                    
-                    error={!!errors.email}
-                    errorText={errors.email?.message}
-                    fullWidth
-                />
             </View>
             <View className="flex flex-row w-full justify-between mt-3">
-                <Button onPress={handleSubmit(onSubmit)} fullWidth className="bg-teal-600">
+                <Button
+                    onPress={handleSubmit}
+                    fullWidth
+                    className="bg-teal-600"
+                    disabled={isSubmitting}
+                >
                     {
                         isSubmitting
                             ?

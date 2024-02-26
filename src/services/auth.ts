@@ -10,7 +10,6 @@ interface ILoginOrCreateParams {
 
 interface IUpdateParams {
     name: string;
-    email: string;
 }
 
 interface IUpdatePasswordParams {
