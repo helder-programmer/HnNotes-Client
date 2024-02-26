@@ -3,15 +3,15 @@ import { useNavigation } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 
 import { INote } from '../../../@types/entities';
-import NoteCard from '../noteCard';
 import { useNotes } from '../../../contexts/notes';
+import NoteCard from '../noteCard';
 
 const DEVICE_HEIGHT = Dimensions.get('screen').height;
 
 function NotesList() {
     const listHeight = DEVICE_HEIGHT - 365;
     const navigation = useNavigation();
-    const { notes, setNotes } = useNotes();
+    const { notes } = useNotes();
 
     const renderItem: ListRenderItem<INote> = ({ item }) => (
         <NoteCard

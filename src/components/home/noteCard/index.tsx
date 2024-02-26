@@ -7,6 +7,7 @@ import { INote } from '../../../@types/entities';
 import CustomText from '../../customText';
 import { NoteService } from '../../../services/note';
 import { useNotes } from '../../../contexts/notes';
+import { useNoteCard } from './hooks/useNoteCard';
 
 
 interface IProps extends PressableProps {
@@ -17,25 +18,7 @@ interface IProps extends PressableProps {
 
 function NoteCard({ note, className, ...props }: IProps) {
     const noteContentWithoutHTML = note.content.replace(/<(.|\n)*?>/g, "").trim();
-    const { notes, setNotes } = useNotes();
-
-    const handleDeleteNote = async (noteId: string) => {
-        try {
-            await NoteService.remove(noteId);
-
-            const noteToDeleteIndex = notes.findIndex(note => note.noteId === noteId);
-
-            const newNotes = [...notes];
-
-            newNotes.splice(noteToDeleteIndex, 1);
-
-            setNotes(newNotes);
-
-
-        } catch (err: any) {
-            console.log(err);
-        }
-    }
+    const { handleDeleteNote } = useNoteCard();
 
     return (
         <Pressable
