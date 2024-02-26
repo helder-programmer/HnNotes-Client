@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../screens/login';
-import Register from '../screens/register';
 
 const { Screen, Navigator } = createNativeStackNavigator();
 
@@ -15,13 +14,6 @@ export function AuthRoutes() {
                     headerShown: false
                 }}
                 component={Login}
-            />
-            <Screen
-                name="register"
-                options={{
-                    headerShown: false
-                }}
-                component={Register}
             />
         </Navigator>
     );

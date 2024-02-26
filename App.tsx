@@ -1,8 +1,9 @@
-import 'expo-dev-client'
+import 'expo-dev-client';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { NativeWindStyleSheet } from "nativewind";
 import { StatusBar } from 'expo-status-bar';
+import * as WebBrowser from 'expo-web-browser';
 
 import { AuthProvider } from './src/contexts/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,6 +15,8 @@ import { NotesProvider } from './src/contexts/notes';
 NativeWindStyleSheet.setOutput({
     default: "native"
 });
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
 

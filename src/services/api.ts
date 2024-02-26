@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as SecureStore from 'expo-secure-store';
 
-const Api = axios.create({ baseURL: 'http://192.168.188.213:8000' });
+const Api = axios.create({ baseURL: 'https://hnnotes-server.onrender.com' });
 
 
 

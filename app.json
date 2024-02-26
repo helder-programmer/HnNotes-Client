@@ -22,10 +22,15 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package":"com.authentication.hnnotes"
+      "package": "com.authentication.hnnotes"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "155d3b05-5337-4106-8d38-06c66f209be6"
+      }
     }
   }
 }

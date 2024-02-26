@@ -1,16 +1,11 @@
 import { IUser } from "../@types/entities";
 import { Api } from "./api";
 
-
-interface ICreateUserParams {
+interface ILoginOrCreateParams {
+    googleId: string;
+    email: string;
     name: string;
-    email: string;
-    password: string;
-}
-
-interface ILoginParams {
-    email: string;
-    password: string;
+    picture: string;
 }
 
 interface IUpdateParams {
@@ -24,12 +19,8 @@ interface IUpdatePasswordParams {
 }
 
 export const AuthService = {
-    create: async (data: ICreateUserParams) => {
-        const response = await Api.post('/users', data);
-        return response.data;
-    },
-    login: async (data: ILoginParams) => {
-        const response = await Api.post<{ user: IUser, token: string }>('/users/login', data);
+    loginOrCreate: async (data: ILoginOrCreateParams) => {
+        const response = await Api.post<{ user: IUser, token: string }>('/users', data);
         return response.data;
     },
     recoverUserInformations: async () => {

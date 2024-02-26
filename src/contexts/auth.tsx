@@ -1,25 +1,38 @@
 import React, { Dispatch, SetStateAction, createContext, useContext, useState, useEffect } from "react";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import Google, { makeRedirectUri } from 'expo-auth-session';
-import { auth } from "../services/firebase";
 
 import { IUser } from "../@types/entities";
 import { AuthService } from "../services/auth";
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from 'expo-secure-store';
+import * as Google from 'expo-auth-session/providers/google';
+import { makeRedirectUri } from "expo-auth-session";
+import { ToastAndroid } from "react-native";
 
 interface IAuthContext {
     user: IUser | null;
-    setUser: Dispatch<SetStateAction<IUser | null>>;
     signed: boolean;
-    signIn(email: string, password: string): Promise<void>;
+    callGoogleAuth(): void;
+    setUser: Dispatch<SetStateAction<IUser | null>>;
     signOut(): Promise<void>;
+    requestIsRunning: boolean;
 }
+
+interface IGoogleData {
+    id: string;
+    email: string;
+    name: string;
+    picture: string;
+}
+
 
 const AuthContext = createContext({} as IAuthContext);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<IUser | null>(null);
+    const [request, response, promptAsync] = Google.useAuthRequest({
+        clientId: '1051088932850-q2poc746pj8k9q7tafa79lc5ug387r23.apps.googleusercontent.com',
+        redirectUri: makeRedirectUri()
+    });
     const navigation = useNavigation();
 
 
@@ -38,15 +51,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
-    const signIn = async (email: string, password: string) => {
-        Google.useAuthRequest({
-            clientId: '1051088932850-q2poc746pj8k9q7tafa79lc5ug387r23.apps.googleusercontent.com',
-            redirectUri: makeRedirectUri()
-        }, null);
-        const { token, user } = await AuthService.login({ email, password });
-        await SecureStore.setItemAsync('hn-token', token);
+    const signIn = async () => {
+        try {
+            const googleData = await getGoogleData(response);
 
-        setUser(user);
+            if (!googleData) return;
+
+            const { token, user } = await AuthService.loginOrCreate({
+                email: googleData.email,
+                googleId: googleData.id,
+                name: googleData.name,
+                picture: googleData.picture
+            });
+
+            await SecureStore.setItemAsync('hn-token', token);
+
+            setUser(user);
+        } catch (err: any) {
+            ToastAndroid.show(err.message, ToastAndroid.SHORT);
+            console.log(err.message);
+        }
+
     }
 
     const signOut = async () => {
@@ -55,9 +80,53 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         navigation.navigate('login');
     }
 
+
+    const getGoogleData = async (response: any) => {
+        try {
+            const fetchResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+                headers: {
+                    Authorization: `Bearer ${response.authentication?.accessToken}`
+                }
+            });
+
+            const data: IGoogleData = await fetchResponse.json();
+
+            return data;
+        } catch (err: any) {
+            ToastAndroid.show(err.message, ToastAndroid.SHORT);
+            console.log(err);
+        }
+    }
+
+    const callGoogleAuth = () => {
+        promptAsync();
+    }
+
+    const getResponse = () => {
+        if (response) {
+            switch (response.type) {
+                case 'error':
+                    ToastAndroid.show('Erro ao se autenticar', ToastAndroid.SHORT);
+                    break;
+                case 'cancel':
+                    ToastAndroid.show('Login cancelado', ToastAndroid.SHORT);
+                case 'success':
+                    signIn();
+                    break;
+                default:
+                    () => { };
+            }
+        }
+    }
+
+    useEffect(() => {
+        getResponse();
+    }, [response]);
+
     useEffect(() => {
         getUserInformations();
     }, []);
+
 
     return (
         <AuthContext.Provider
@@ -65,7 +134,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 signed: !!user,
                 user,
                 setUser,
-                signIn,
+                requestIsRunning: !!request,
+                callGoogleAuth,
                 signOut
             }}
         >
