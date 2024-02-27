@@ -1,12 +1,13 @@
 import React, { Dispatch, SetStateAction, createContext, useContext, useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { ToastAndroid } from "react-native";
+import { makeRedirectUri } from "expo-auth-session";
+import * as SecureStore from 'expo-secure-store';
+import * as Google from 'expo-auth-session/providers/google';
+import Toast from "react-native-toast-message";
 
 import { IUser } from "../@types/entities";
 import { AuthService } from "../services/auth";
-import { useNavigation } from "@react-navigation/native";
-import * as SecureStore from 'expo-secure-store';
-import * as Google from 'expo-auth-session/providers/google';
-import { makeRedirectUri } from "expo-auth-session";
-import { ToastAndroid } from "react-native";
 
 interface IAuthContext {
     user: IUser | null;
@@ -34,6 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         redirectUri: makeRedirectUri()
     });
     const navigation = useNavigation();
+    const [requestIsRunning, setRequestIsRunning] = useState(false);
 
 
     const getUserInformations = async () => {
@@ -53,6 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const signIn = async () => {
         try {
+            setRequestIsRunning(true);
             const googleData = await getGoogleData(response);
 
             if (!googleData) return;
@@ -67,6 +70,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             await SecureStore.setItemAsync('hn-token', token);
 
             setUser(user);
+            Toast.show({
+                type: 'success',
+                text1: `Hello 👋`,
+                text2: `Welcome to HnNotes, ${user.name}`,
+            });
+            setRequestIsRunning(false);
         } catch (err: any) {
             ToastAndroid.show(err.message, ToastAndroid.SHORT);
             console.log(err.message);
@@ -98,9 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
-    const callGoogleAuth = () => {
-        promptAsync();
-    }
+    const callGoogleAuth = () => promptAsync();
 
     const getResponse = () => {
         if (response) {
@@ -134,7 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 signed: !!user,
                 user,
                 setUser,
-                requestIsRunning: !!request,
+                requestIsRunning: requestIsRunning,
                 callGoogleAuth,
                 signOut
             }}

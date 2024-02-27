@@ -5,8 +5,6 @@ import styled from "styled-components/native";
 
 import { INote } from '../../../@types/entities';
 import CustomText from '../../customText';
-import { NoteService } from '../../../services/note';
-import { useNotes } from '../../../contexts/notes';
 import { useNoteCard } from './hooks/useNoteCard';
 
 

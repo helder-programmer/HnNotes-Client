@@ -1,33 +1,16 @@
 import { View, Text, Platform, ActivityIndicator } from 'react-native';
-import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigation } from '@react-navigation/native';
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
-import * as yup from 'yup';
 import * as Animatable from 'react-native-animatable';
 
 import { useAuth } from '../contexts/auth';
-import Input from '../components/input';
-import Button from '../components/button';
 import CustomText from '../components/customText';
 import { KeyboardAvoidingView } from 'react-native';
-import CustomView from '../components/customView';
 import { useTheme } from '../contexts/theme';
 import ThemeSwitcher from '../components/themeSwitcher';
 
-type Inputs = {
-    email: string;
-    password: string;
-}
-
-
 function Login() {
-    const navigation = useNavigation();
     const { callGoogleAuth, requestIsRunning } = useAuth();
     const { theme } = useTheme();
-
-    const [error, setError] = useState('');
 
     return (
         <KeyboardAvoidingView
@@ -53,12 +36,19 @@ function Login() {
                 style={{ backgroundColor: theme.colors.primary }}
             >
                 <View>
-                    <GoogleSigninButton
-                        size={GoogleSigninButton.Size.Wide}
-                        color={GoogleSigninButton.Color.Dark}
-                        onPress={callGoogleAuth}
-                        disabled={!requestIsRunning}
-                    />
+                    {
+                        requestIsRunning ? (
+                            <ActivityIndicator size="small" color="#1e40af" />)
+                            : (
+
+                                <GoogleSigninButton
+                                    size={GoogleSigninButton.Size.Wide}
+                                    color={GoogleSigninButton.Color.Dark}
+                                    onPress={callGoogleAuth}
+                                    disabled={requestIsRunning}
+                                />
+                            )
+                    }
                 </View>
                 <ThemeSwitcher />
             </Animatable.View>

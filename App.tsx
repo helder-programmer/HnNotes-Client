@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Routes } from './src/routes';
 import { ThemeProvider } from './src/contexts/theme';
 import { NotesProvider } from './src/contexts/notes';
+import Toast from 'react-native-toast-message';
 
 
 NativeWindStyleSheet.setOutput({
@@ -28,6 +29,7 @@ export default function App() {
                         <NotesProvider>
                             <StatusBar style="dark" translucent />
                             <Routes />
+                            <Toast />
                         </NotesProvider>
                     </ThemeProvider>
                 </AuthProvider>
